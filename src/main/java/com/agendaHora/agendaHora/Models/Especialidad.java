@@ -25,7 +25,7 @@ public class Especialidad {
 
     // Relación con Usuarios (Medicos)
     @ManyToMany(mappedBy = "especialidades")
-    private Set<Medico> usuarios = new HashSet<>();
+    private Set<Medico> medicos = new HashSet<>();
 
     // Otros campos y métodos getter/setter
 }

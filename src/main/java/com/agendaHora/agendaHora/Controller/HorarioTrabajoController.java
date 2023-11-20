@@ -1,17 +1,20 @@
 package com.agendaHora.agendaHora.Controller;
 
+import com.agendaHora.agendaHora.Models.DTOs.HorarioTrabajoDTO;
 import com.agendaHora.agendaHora.Models.HorarioTrabajo;
-import com.agendaHora.agendaHora.Models.HorarioTrabajoRequest;
 import com.agendaHora.agendaHora.Models.Medico;
+import com.agendaHora.agendaHora.Repositories.HorarioTrabajoRepository;
 import com.agendaHora.agendaHora.Services.HorarioTrabajoService;
 import com.agendaHora.agendaHora.Services.MedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 
 @RestController
@@ -19,50 +22,24 @@ import java.util.NoSuchElementException;
 public class HorarioTrabajoController {
 
     @Autowired
-    private HorarioTrabajoService horarioTrabajoService;
+    private HorarioTrabajoRepository horarioTrabajoRepository;
 
     @Autowired
-    private MedicoService medicoService;
+    private  HorarioTrabajoService horarioTrabajoService;
 
-    @PostMapping("/asignar")
-    public ResponseEntity<HorarioTrabajo> asignarHorarioTrabajo(@RequestBody HorarioTrabajoRequest request) {
-        Medico medico = medicoService.obtenerMedicoPorId(request.getMedicoId());
-        HorarioTrabajo horarioTrabajo = horarioTrabajoService.asignarHorarioTrabajo(
-                medico,
-                request.getDiaSemana(),
-                request.getHoraInicio(),
-                request.getHoraFin()
-        );
-        return ResponseEntity.ok().body(horarioTrabajo);
-    }
-
-    @DeleteMapping("/borrar/{horarioId}")
-    public ResponseEntity<Void> borrarHorarioTrabajo(@PathVariable Long horarioId) {
-        horarioTrabajoService.borrarHorarioTrabajo(horarioId);
-        return ResponseEntity.noContent().build();
-    }
-
-    // En tu controlador (HorarioTrabajoController.java)
-    @PutMapping("/modificar/{horarioId}")
-    public ResponseEntity<HorarioTrabajo> modificarHora(@PathVariable Long horarioId, @RequestBody HorarioTrabajoRequest horarioTrabajoDto) {
-        try {
-            HorarioTrabajo horarioTrabajo = horarioTrabajoService.modificarHora(horarioId, horarioTrabajoDto);
-            return new ResponseEntity<>(horarioTrabajo, HttpStatus.OK);
-        } catch (NoSuchElementException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @GetMapping("/horas-por-medico-y-fecha/{idMedico}")
+    public ResponseEntity<List<String>> obtenerHorasPorMedicoIdYFecha(
+            @PathVariable("idMedico") Long idMedico,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha) {
+        List<String> horas = horarioTrabajoService.obtenerHorasPorMedicoIdYFecha(idMedico, fecha);
+        return ResponseEntity.ok().body(horas);
     }
 
 
-    @GetMapping("/medico/{medicoId}")
-    public ResponseEntity<List<HorarioTrabajo>> obtenerHorariosPorMedico(@PathVariable Long medicoId) {
-        Medico medico = medicoService.obtenerMedicoPorId(medicoId);
-        List<HorarioTrabajo> horarios = horarioTrabajoService.obtenerHorariosPorMedico(medico);
-        return ResponseEntity.ok().body(horarios);
+    @GetMapping("/fechas/{medicoId}")
+    public ResponseEntity<List<HorarioTrabajoDTO>> obtenerFechasPorMedico(@PathVariable Long medicoId) {
+        List<HorarioTrabajoDTO> horariosDTO = horarioTrabajoService.obtenerFechasPorMedico(medicoId);
+        return ResponseEntity.ok().body(horariosDTO);
     }
-
-    // Otros métodos según las necesidades de tu aplicación
 
 }

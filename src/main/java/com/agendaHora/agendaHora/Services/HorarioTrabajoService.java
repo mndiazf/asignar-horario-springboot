@@ -1,55 +1,33 @@
 package com.agendaHora.agendaHora.Services;
 
+import com.agendaHora.agendaHora.Models.DTOs.HorarioTrabajoDTO;
 import com.agendaHora.agendaHora.Models.HorarioTrabajo;
-import com.agendaHora.agendaHora.Models.HorarioTrabajoRequest;
-import com.agendaHora.agendaHora.Models.Medico;
 import com.agendaHora.agendaHora.Repositories.HorarioTrabajoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class HorarioTrabajoService {
 
+
     @Autowired
     private HorarioTrabajoRepository horarioTrabajoRepository;
 
-    public HorarioTrabajo asignarHorarioTrabajo(Medico medico, String diaSemana, String horaInicio, String horaFin) {
-        HorarioTrabajo horarioTrabajo = new HorarioTrabajo();
-        horarioTrabajo.setMedico(medico);
-        horarioTrabajo.setDiaSemana(diaSemana);
-        horarioTrabajo.setHoraInicio(horaInicio);
-        horarioTrabajo.setHoraFin(horaFin);
+    public List<HorarioTrabajoDTO> obtenerFechasPorMedico(Long medicoId) {
+        List<HorarioTrabajo> horarios = horarioTrabajoRepository.findByMedicoId(medicoId);
 
-        return horarioTrabajoRepository.save(horarioTrabajo);
+        return horarios.stream()
+                .map(horario -> new HorarioTrabajoDTO(horario.getId(), horario.getFecha()))
+                .collect(Collectors.toList());
     }
 
-    public void borrarHorarioTrabajo(Long horarioId) {
-        horarioTrabajoRepository.deleteById(horarioId);
+    public List<String> obtenerHorasPorMedicoIdYFecha(Long idMedico, Date fecha) {
+        return horarioTrabajoRepository.findHorasByMedicoIdAndFecha(idMedico, fecha);
     }
 
-    // En tu servicio (HorarioTrabajoService.java)
-    public HorarioTrabajo modificarHora(Long horarioId, HorarioTrabajoRequest horarioTrabajoDto) {
-        Optional<HorarioTrabajo> optionalHorarioTrabajo = horarioTrabajoRepository.findById(horarioId);
-
-        if (optionalHorarioTrabajo.isPresent()) {
-            HorarioTrabajo horarioTrabajo = optionalHorarioTrabajo.get();
-            horarioTrabajo.setDiaSemana(horarioTrabajoDto.getDiaSemana());
-            horarioTrabajo.setHoraInicio(horarioTrabajoDto.getHoraInicio());
-            horarioTrabajo.setHoraFin(horarioTrabajoDto.getHoraFin());
-
-            return horarioTrabajoRepository.save(horarioTrabajo);
-        } else {
-            throw new NoSuchElementException("Horario de trabajo no encontrado con ID: " + horarioId);
-        }
-    }
-
-    public List<HorarioTrabajo> obtenerHorariosPorMedico(Medico medico) {
-        return horarioTrabajoRepository.findByMedico(medico);
-    }
-
-    // Otros métodos relacionados con los horarios de trabajo
 }

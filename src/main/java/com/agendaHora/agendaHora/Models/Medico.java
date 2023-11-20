@@ -28,10 +28,13 @@ public class Medico {
     // Relación con Especialidades
     @ManyToMany
     @JoinTable(
-            name = "usuario_especialidad",
-            joinColumns = @JoinColumn(name = "usuario_id"),
+            name = "medico_especialidad",
+            joinColumns = @JoinColumn(name = "medico_id"),
             inverseJoinColumns = @JoinColumn(name = "especialidad_id"))
     private Set<Especialidad> especialidades = new HashSet<>();
 
     // Otros campos y métodos getter/setter
+
+    @OneToMany(mappedBy = "medico")
+    private Set<HorarioTrabajo> horariosTrabajo = new HashSet<>();
 }

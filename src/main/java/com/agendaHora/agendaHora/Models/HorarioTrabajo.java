@@ -6,12 +6,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+import jakarta.validation.constraints.Pattern;
+
+
+import java.util.Date;
+
+@Entity
+@Table(name = "\"horarioTrabajo\"")
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Data
-@Table(name = "\"horarioTrabajo\"")
 public class HorarioTrabajo {
 
     @Id
@@ -22,9 +28,13 @@ public class HorarioTrabajo {
     @JoinColumn(name = "medico_id", nullable = false)
     private Medico medico;
 
-    private String diaSemana;
-    private String horaInicio;
-    private String horaFin;
+    @Temporal(TemporalType.DATE)
+    private Date fecha;
+
+    @Pattern (regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$", message = "Formato de hora incorrecto. Debe ser en formato 'HH:mm'")
+    private String hora;
+
+
 
     // Otros campos y métodos getter/setter
 }
