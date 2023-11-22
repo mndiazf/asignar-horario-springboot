@@ -11,10 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
-import java.util.Date;
+
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/medicos")
@@ -23,23 +22,15 @@ public class MedicoController {
     @Autowired
     private MedicoService medicoService;
 
-    @Autowired
-    private MedicoRepository medicoRepository;
-
+    //Buscar medico por especialidad
     @GetMapping("/por-especialidad/{idEspecialidad}")
     public ResponseEntity<List<MedicoDTO>> obtenerMedicosPorEspecialidad(@PathVariable Long idEspecialidad) {
         List<MedicoDTO> medicos = medicoService.obtenerMedicosPorEspecialidad(idEspecialidad);
         return ResponseEntity.ok().body(medicos);
     }
 
-    @GetMapping("/medicos-por-fecha")
-    public ResponseEntity<List<Medico>> obtenerMedicosPorFecha(
-            @RequestParam @DateTimeFormat(pattern = "dd/MM/yyyy") Date fecha) {
-        List<Medico> medicos = medicoService.obtenerMedicosPorFechaDeHorario(fecha);
-        return ResponseEntity.ok().body(medicos);
-    }
 
-
+    //Buscar medico por nombre y apellido
     @GetMapping("/buscar")
     public ResponseEntity<List<MedicoDTO>> buscarMedicosPorNombreOApellido(
             @RequestParam(value = "q", required = false) String query
@@ -52,10 +43,12 @@ public class MedicoController {
         }
     }
 
+    //Obtener medico por id
     @GetMapping("/{id}")
     public ResponseEntity<MedicoDTO> obtenerMedicoPorId(@PathVariable Long id) {
         MedicoDTO medicoDTO = medicoService.obtenerMedicoPorId(id);
         return new ResponseEntity<>(medicoDTO, HttpStatus.OK);
     }
+
 
 }

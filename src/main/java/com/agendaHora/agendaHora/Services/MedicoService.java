@@ -7,10 +7,8 @@ import com.agendaHora.agendaHora.Repositories.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.Date;
+
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -19,14 +17,6 @@ public class MedicoService {
 
     @Autowired
     private MedicoRepository medicoRepository;
-
-    @Autowired
-    private HorarioTrabajoRepository horarioTrabajoRepository;
-
-    @Autowired
-    private HorarioTrabajoService horarioTrabajoService;
-
-
 
 
     public List<MedicoDTO> buscarMedicosPorNombreOApellido(String query) {
@@ -38,9 +28,7 @@ public class MedicoService {
                 .collect(Collectors.toList());
     }
 
-    public List<Medico> obtenerMedicosPorFechaDeHorario(Date fecha) {
-        return medicoRepository.findDistinctByHorariosTrabajoFecha(fecha);
-    }
+
 
 
     public List<MedicoDTO> obtenerMedicosPorEspecialidad(Long idEspecialidad) {

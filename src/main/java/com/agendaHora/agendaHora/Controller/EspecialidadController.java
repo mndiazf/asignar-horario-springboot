@@ -1,10 +1,8 @@
 package com.agendaHora.agendaHora.Controller;
 
 import com.agendaHora.agendaHora.Models.DTOs.EspecialidadDTO;
-import com.agendaHora.agendaHora.Models.Especialidad;
 import com.agendaHora.agendaHora.Services.EspecialidadService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +18,7 @@ public class EspecialidadController {
     @Autowired
     private EspecialidadService especialidadService;
 
+    //LLama todas las especialidades
     @GetMapping("/todas")
     public ResponseEntity<List<EspecialidadDTO>> obtenerTodasEspecialidades() {
         List<EspecialidadDTO> especialidades = especialidadService.obtenerTodasEspecialidades();

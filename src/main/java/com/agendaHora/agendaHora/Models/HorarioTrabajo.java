@@ -7,10 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-import jakarta.validation.constraints.Pattern;
 
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "\"horarioTrabajo\"")
@@ -31,11 +31,9 @@ public class HorarioTrabajo {
     @Temporal(TemporalType.DATE)
     private Date fecha;
 
-    @Pattern (regexp = "^([01]?[0-9]|2[0-3]):[0-5][0-9]$", message = "Formato de hora incorrecto. Debe ser en formato 'HH:mm'")
-    private String hora;
+    @OneToMany(mappedBy = "horarioTrabajo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Hora> horas;
 
-
-
-    // Otros campos y métodos getter/setter
 }
+
 
