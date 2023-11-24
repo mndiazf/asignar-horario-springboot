@@ -1,5 +1,6 @@
 package com.agendaHora.agendaHora.Services;
 
+import com.agendaHora.agendaHora.Models.DTOs.HoraDTO;
 import com.agendaHora.agendaHora.Models.DTOs.HorarioTrabajoDTO;
 import com.agendaHora.agendaHora.Models.Hora;
 import com.agendaHora.agendaHora.Models.HorarioTrabajo;
@@ -154,15 +155,16 @@ public class HorarioTrabajoService {
                 .collect(Collectors.toList());
     }
 
-
-    public List<String> obtenerHorasPorHorarioTrabajoId(Long idHorarioTrabajo) {
+    public List<HoraDTO> obtenerHorasPorHorarioTrabajoId(Long idHorarioTrabajo) {
         Optional<HorarioTrabajo> horarioOptional = horarioTrabajoRepository.findById(idHorarioTrabajo);
 
-        return horarioOptional.map(HorarioTrabajo::getHoras)
-                .orElse(Collections.emptyList())
-                .stream()
-                .map(Hora::getHora)
-                .collect(Collectors.toList());
+        return horarioOptional.map(horarioTrabajo ->
+                        horarioTrabajo.getHoras().stream()
+                                .map(hora -> new HoraDTO(hora.getId(), hora.getHora()))
+                                .collect(Collectors.toList()))
+                .orElse(Collections.emptyList());
     }
+
+
 
 }

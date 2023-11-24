@@ -1,5 +1,6 @@
 package com.agendaHora.agendaHora.Controller;
 
+import com.agendaHora.agendaHora.Models.DTOs.HoraDTO;
 import com.agendaHora.agendaHora.Models.DTOs.HorarioTrabajoDTO;
 
 import com.agendaHora.agendaHora.Repositories.HorarioTrabajoRepository;
@@ -11,11 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.time.LocalDate;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/api/horarios-trabajo")
 public class HorarioTrabajoController {
@@ -85,15 +87,18 @@ public class HorarioTrabajoController {
 
     //Obtener horas por id de horario trabajo
     @GetMapping("/horas/{idHorarioTrabajo}")
-    public ResponseEntity<List<String>> obtenerHorasPorHorarioTrabajoId(@PathVariable Long idHorarioTrabajo) {
-        List<String> horas = horarioTrabajoService.obtenerHorasPorHorarioTrabajoId(idHorarioTrabajo);
+    public ResponseEntity<List<HoraDTO>> obtenerHorasPorHorarioTrabajoId(@PathVariable Long idHorarioTrabajo) {
+        List<HoraDTO> horas = horarioTrabajoService.obtenerHorasPorHorarioTrabajoId(idHorarioTrabajo);
 
-        if (horas != null && !horas.isEmpty()) {
+        if (horas != null) {
             return ResponseEntity.ok().body(horas);
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body(Collections.emptyList());
         }
     }
+
+
+
 
 
 
