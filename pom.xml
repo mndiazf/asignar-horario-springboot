@@ -64,17 +64,6 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<configuration>
-					<propertiesEncoding>UTF-8</propertiesEncoding>
-					<nonFilteredFileExtensions>
-						<nonFilteredFileExtension>xls</nonFilteredFileExtension>
-						<nonFilteredFileExtension>zip</nonFilteredFileExtension>
-					</nonFilteredFileExtensions>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 
