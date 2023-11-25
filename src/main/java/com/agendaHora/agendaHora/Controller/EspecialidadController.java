@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "https://playerdos.com", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/especialidades")
 public class EspecialidadController {
