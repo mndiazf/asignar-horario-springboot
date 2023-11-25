@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 
-@CrossOrigin("*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api/horarios-trabajo")
 public class HorarioTrabajoController {
